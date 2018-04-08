@@ -24,7 +24,7 @@ class Blockchain(object):
             :param proof: The hash of the current block
             :type proof: int
 
-            :param prev_hash: The has of block[i-1]
+            :param prev_hash: The hash of block[i-1]
             :type prev_hash: str
 
             :return:
@@ -41,3 +41,28 @@ class Blockchain(object):
 
     def get_prev_block(self):
         return self.chain[-1]
+
+    @staticmethod
+    def proof_of_work(prev_nonce):
+        """ I will determine the common algorithm miners will use for PoW so only hashing power
+            in terms of hardware will determine how fast a golden hash is mined.
+
+            :param prev_nonce: Nonce of previous block
+            :type prev_nonce: int
+
+            :return:
+        """
+        new_nonce = 1
+        check_proof = False
+
+        while not check_proof:
+            # A non-symmetrical/non-commutative operation between the new and previous proof
+            hash_operation = hashlib.sha3_256(
+                str(new_nonce**2 - prev_nonce**2).encode()  # Squaring the nonce to make mining a little harder
+            ).hexdigest()
+
+            if hash_operation[0:4] == '0000':
+                check_proof = True
+            new_nonce += 1
+
+        return new_nonce
