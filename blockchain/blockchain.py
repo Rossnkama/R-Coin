@@ -11,7 +11,7 @@ class Blockchain(object):
         """ Initialisation of the blockchain and genesis block.
             These are all of the variables referring to each instance of the blockchain object:
 
-            :type self.chain: <list>
+            :type self.chain: list
         """
         self.chain = []
         # Previous hash is 0 referring to the creation of genesis block at initialisation.
@@ -50,14 +50,15 @@ class Blockchain(object):
             :param prev_nonce: Nonce of previous block
             :type prev_nonce: int
 
-            :return:
+            :return: new_nonce, The nonce that was used to attain the golden hash.
         """
         new_nonce = 1
         check_proof = False
 
         while not check_proof:
-            # A non-symmetrical/non-commutative operation between the new and previous proof
-            hash_operation = hashlib.sha3_256(
+            # A non-symmetrical/non-commutative operation between the new and previous nonce proof
+            # This prevents every 2 blocks from having the same
+            hash_operation = hashlib.sha256(
                 str(new_nonce**2 - prev_nonce**2).encode()  # Squaring the nonce to make mining a little harder
             ).hexdigest()
 
@@ -66,3 +67,16 @@ class Blockchain(object):
             new_nonce += 1
 
         return new_nonce
+
+    @staticmethod
+    def hash(block):
+        """ This hashes a block's jsonfied dictionary.
+
+            :param block: A block in the blockchain
+            :type block: dict
+
+            :return: <str>: SHA256(block)
+        """
+        encoded_block = json.dumps(block, sort_keys=True).encode()
+        return hashlib.sha256(encoded_block).hexdigest()
+
