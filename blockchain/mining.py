@@ -36,3 +36,18 @@ def mine_block():
 
     # JSON of response and a HTTP status of (200 OK)
     return jsonify(response), 200
+
+
+# Getting the entire blockchain's ledger
+@app.route('/get_chain', methods=['GET'])
+def get_chain():
+    """ Miner's will use this to their own copy of the entire blockchain
+
+            :return: Some blockchain metadata, HTTP status
+            :rtype: object, int
+    """
+    response = {
+        'Blockchain': blockchain.chain,
+        'Blockchain length': len(blockchain.chain)
+    }
+    return jsonify(response), 200
