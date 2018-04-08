@@ -11,6 +11,11 @@ blockchain = blockchainArch.Blockchain()
 # Mining a new block
 @app.route('/mine_block', methods=['GET'])
 def mine_block():
+    """ Miner's will use this method to mine for blocks in the blockchain.
+
+        :return: Congrats message with block metadata, HTTP status
+        :rtype: object, int
+    """
     previous_block = blockchain.get_prev_block()
     previous_nonce = previous_block['nonce']
 
